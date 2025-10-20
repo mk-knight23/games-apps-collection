@@ -1,0 +1,19 @@
+Title: Food Fight Frenzy
+Genre: Action / Arcade
+Objective: Engage in epic food battles in various locations while avoiding angry chefs and cleaning staff who try to stop the chaos.
+Gameplay Mechanics:
+- Top-down view where players throw food items at opponents in real-time battles
+- Collect different food weapons: spaghetti flingers, meatball launchers, cream pie cannons, banana peel traps
+- Each food type has unique properties and damage effects (ketchup slows enemies, hot sauce burns, ice cream freezes)
+- Battle locations include school cafeteria, fancy restaurant, food truck festival, and supermarket
+- Dodge angry chefs with rolling pins and janitors with mops who try to clean up the mess
+- Power-ups include "Super Size" (giant food portions), "Rapid Fire" (faster throwing), and "Shield" (plate as defense)
+- Multiplayer modes: Free-for-all food fights, team battles, and capture the flag with food items
+- Progressive unlock system with new foods, locations, and character customization
+Target Audience: Casual gamers and competitive players aged 8-35 who enjoy chaotic multiplayer action
+Monetization Strategy:
+- Free-to-play with rewarded ads for bonus food and power-ups
+- Battle pass system with seasonal food themes and exclusive rewards
+- In-app purchases for cosmetic items: character outfits, food skins, and special effects
+- Premium currency for faster progression and exclusive food weapons
+- Tournament entry fees with real prize pools for competitive players

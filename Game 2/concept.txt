@@ -1,0 +1,16 @@
+Title: Clumsy Cat Chaos
+Genre: Physics-based Puzzle / Simulation
+Objective: Help a perpetually clumsy cat navigate through increasingly absurd household environments without causing complete destruction.
+Gameplay Mechanics:
+- Tap and drag to guide a physics-based cat through obstacle courses filled with breakable objects
+- Cat has realistic clumsy movements - trips, slides, and knocks things over with hilarious ragdoll physics
+- Each level features different rooms (kitchen, living room, bathroom) with unique hazards and interactive objects
+- Collect "Nine Lives" power-ups to undo catastrophic failures
+- Unlock different cat breeds with unique clumsiness traits (e.g., "Slippery Paws" Siamese, "Tail Trouble" Tabby)
+- Sound effects include exaggerated crashing, meowing, and human reactions of frustration/amusement
+Target Audience: Cat lovers and puzzle game enthusiasts aged 10-40
+Monetization Strategy:
+- Free download with ads between levels
+- In-app purchases for new cat breeds, costumes, and furniture packs
+- "Catnip Boost" consumables for temporary grace periods
+- Premium "Ad-Free Cat Paradise" version

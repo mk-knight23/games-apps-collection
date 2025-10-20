@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dance Battle Seniors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .game-title {
+            font-size: 2.5em;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+            animation: dance 2s infinite;
+        }
+
+        @keyframes dance {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.05); }
+            50% { transform: rotate(-3deg) scale(1.02); }
+            75% { transform: rotate(3deg) scale(1.05); }
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .character-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .character-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .character-card.selected {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .character-emoji {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .character-name {
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .character-special {
+            font-size: 0.8em;
+            color: #feca57;
+            margin-top: 3px;
+        }
+
+        canvas {
+            border: 3px solid #fff;
+            border-radius: 10px;
+            display: block;
+            background: linear-gradient(to bottom, #2c3e50 0%, #34495e 100%);
+        }
+
+        .dance-track {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .dance-key {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            transition: all 0.1s ease;
+        }
+
+        .dance-key.active {
+            background: rgba(255, 255, 255, 0.8);
+            color: #2c3e50;
+            transform: scale(1.2);
+        }
+
+        .dance-key.perfect {
+            background: #27ae60;
+            animation: perfectHit 0.3s ease;
+        }
+
+        .dance-key.good {
+            background: #f39c12;
+            animation: goodHit 0.3s ease;
+        }
+
+        .dance-key.miss {
+            background: #e74c3c;
+            animation: missHit 0.3s ease;
+        }
+
+        @keyframes perfectHit {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes goodHit {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes missHit {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+
+        .game-over h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .restart-btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 15px;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .combo-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            font-weight: bold;
+            color: #feca57;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .combo-indicator.show {
+            opacity: 1;
+            animation: comboPopup 0.5s ease;
+        }
+
+        @keyframes comboPopup {
+            0% { transform: translate(-50%, -50%) scale(0.5); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .special-move-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .special-move-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f39c12 0%, #e74c3c 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .special-move-ready {
+            text-align: center;
+            color: #feca57;
+            font-weight: bold;
+            margin-bottom: 10px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">🕺 Dance Battle Seniors 💃</h1>
+            <div class="game-stats">
+                <div>🏆 Score: <span id="scoreCount">0</span></div>
+                <div>🔥 Combo: <span id="comboCount">0</span></div>
+                <div>⭐ Perfect: <span id="perfectCount">0</span></div>
+                <div>🎵 Song: <span id="songName">Disco Nights</span></div>
+            </div>
+            <div class="special-move-bar">
+                <div class="special-move-fill" id="specialMoveFill"></div>
+            </div>
+            <div class="special-move-ready" id="specialMoveReady"></div>
+            <div class="character-selector">
+                <div class="character-card selected" data-character="grandma-betty">
+                    <div class="character-emoji">👵</div>
+                    <div class="character-name">Grandma Betty</div>
+                    <div class="character-special">Hip Replacement</div>
+                </div>
+                <div class="character-card" data-character="grandpa-joe">
+                    <div class="character-emoji">👴</div>
+                    <div class="character-name">Grandpa Joe</div>
+                    <div class="character-special">Walker Shuffle</div>
+                </div>
+                <div class="character-card" data-character="aunt-mabel">
+                    <div class="character-emoji">👩‍🦳</div>
+                    <div class="character-name">Aunt Mabel</div>
+                    <div class="character-special">Hearing Aid</div>
+                </div>
+                <div class="character-card" data-character="uncle-frank">
+                    <div class="character-emoji">👨‍🦳</div>
+                    <div class="character-name">Uncle Frank</div>
+                    <div class="character-special">Denture Drop</div>
+                </div>
+            </div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div class="dance-track">
+            <div class="dance-key" data-key="a">A</div>
+            <div class="dance-key" data-key="s">S</div>
+            <div class="dance-key" data-key="d">D</div>
+            <div class="dance-key" data-key="f">F</div>
+            <div class="dance-key" data-key="j">J</div>
+            <div class="dance-key" data-key="k">K</div>
+            <div class="dance-key" data-key="l">L</div>
+        </div>
+        <div class="controls">
+            <p>🎮 Press A, S, D, F, J, K, L keys when notes reach the target zone!</p>
+            <p>⭐ Build combos for higher scores! Press SPACE for special move when ready!</p>
+        </div>
+        <div class="combo-indicator" id="comboIndicator"></div>
+        <div class="game-over" id="gameOver">
+            <h2>Dance Battle Complete!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <p>Perfect Hits: <span id="finalPerfect">0</span></p>
+            <p>Max Combo: <span id="finalCombo">0</span></p>
+            <button class="restart-btn" onclick="restartGame()">Dance Again!</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game state
+        let gameState = {
+            score: 0,
+            combo: 0,
+            maxCombo: 0,
+            perfectHits: 0,
+            currentSong: 0,
+            gameOver: false,
+            selectedCharacter: 'grandma-betty',
+            specialMoveEnergy: 0,
+            specialMoveReady: false,
+            specialMoveActive: false,
+            notes: [],
+            particles: [],
+            lastNoteTime: 0,
+            noteSpeed: 2,
+            songStartTime: Date.now(),
+            songDuration: 60000, // 60 seconds per song
+            judgeLineY: 320
+        };
+
+        // Character definitions
+        const characters = {
+            'grandma-betty': {
+                emoji: '👵',
+                name: 'Grandma Betty',
+                specialMove: 'Hip Replacement Spin',
+                specialEmoji: '🦴',
+                color: '#ff6b6b'
+            },
+            'grandpa-joe': {
+                emoji: '👴',
+                name: 'Grandpa Joe',
+                specialMove: 'Walker Shuffle',
+                specialEmoji: '🦯',
+                color: '#4ecdc4'
+            },
+            'aunt-mabel': {
+                emoji: '👩‍🦳',
+                name: 'Aunt Mabel',
+                specialMove: 'Hearing Aid Harmony',
+                specialEmoji: '🎧',
+                color: '#f7b731'
+            },
+            'uncle-frank': {
+                emoji: '👨‍🦳',
+                name: 'Uncle Frank',
+                specialMove: 'Denture Drop',
+                specialEmoji: '🦷',
+                color: '#5f27cd'
+            }
+        };
+
+        // Songs
+        const songs = [
+            { name: 'Disco Nights', bpm: 120, duration: 60000 },
+            { name: 'Rock Around the Clock', bpm: 100, duration: 60000 },
+            { name: 'Swing Time', bpm: 140, duration: 60000 },
+            { name: 'Ballroom Waltz', bpm: 80, duration: 60000 }
+        ];
+
+        // Note patterns
+        const notePatterns = [
+            ['a', 's', 'd', 'f'],
+            ['j', 'k', 'l'],
+            ['a', 'd', 'j', 'l'],
+            ['s', 'f', 'j', 'k'],
+            ['a', 's', 'd', 'f', 'j', 'k', 'l']
+        ];
+
+        // Note class
+        class Note {
+            constructor(key, lane) {
+                this.key = key;
+                this.lane = lane;
+                this.x = this.getLaneX(lane);
+                this.y = -50;
+                this.hit = false;
+                this.missed = false;
+                this.perfect = false;
+                this.good = false;
+            }
+
+            getLaneX(lane) {
+                const laneWidth = 100;
+                const startX = 100;
+                return startX + lane * laneWidth;
+            }
+
+            update() {
+                this.y += gameState.noteSpeed;
+                
+                // Check if note passed the judge line
+                if (this.y > gameState.judgeLineY + 50 && !this.hit && !this.missed) {
+                    this.missed = true;
+                    this.onMiss();
+                }
+            }
+
+            checkHit(key) {
+                if (this.key === key && !this.hit && !this.missed) {
+                    const distance = Math.abs(this.y - gameState.judgeLineY);
+                    
+                    if (distance < 20) {
+                        this.perfect = true;
+                        this.hit = true;
+                        this.onPerfectHit();
+                        return 'perfect';
+                    } else if (distance < 40) {
+                        this.good = true;
+                        this.hit = true;
+                        this.onGoodHit();
+                        return 'good';
+                    }
+                }
+                return false;
+            }
+
+            onPerfectHit() {
+                gameState.score += 100 * (1 + Math.floor(gameState.combo / 10));
+                gameState.combo++;
+                gameState.perfectHits++;
+                gameState.specialMoveEnergy = Math.min(100, gameState.specialMoveEnergy + 10);
+                gameState.maxCombo = Math.max(gameState.maxCombo, gameState.combo);
+                
+                createParticles(this.x, this.y, '⭐');
+                showComboIndicator();
+                
+                if (gameState.combo > 0 && gameState.combo % 10 === 0) {
+                    showComboIndicator(`${gameState.combo} COMBO!`);
+                }
+            }
+
+            onGoodHit() {
+                gameState.score += 50 * (1 + Math.floor(gameState.combo / 10));
+                gameState.combo++;
+                gameState.specialMoveEnergy = Math.min(100, gameState.specialMoveEnergy + 5);
+                gameState.maxCombo = Math.max(gameState.maxCombo, gameState.combo);
+                
+                createParticles(this.x, this.y, '✨');
+            }
+
+            onMiss() {
+                gameState.combo = 0;
+                createParticles(this.x, this.y, '❌');
+            }
+
+            draw() {
+                if (this.hit || this.missed) return;
+                
+                ctx.save();
+                
+                // Note glow effect
+                const glowSize = 20 + Math.sin(Date.now() * 0.005) * 5;
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowSize);
+                gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(this.x - glowSize, this.y - glowSize, glowSize * 2, glowSize * 2);
+                
+                // Note
+                ctx.fillStyle = '#fff';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Note letter
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.key.toUpperCase(), this.x, this.y);
+                
+                ctx.restore();
+            }
+        }
+
+        // Dancer class
+        class Dancer {
+            constructor(character) {
+                this.character = characters[character];
+                this.x = canvas.width / 2;
+                this.y = 200;
+                this.animation = 0;
+                this.danceMove = 0;
+                this.specialAnimation = 0;
+            }
+
+            update() {
+                this.animation += 0.1;
+                
+                if (gameState.specialMoveActive) {
+                    this.specialAnimation += 0.2;
+                } else {
+                    this.danceMove = Math.sin(this.animation) * 10;
+                }
+            }
+
+            performSpecialMove() {
+                gameState.specialMoveActive = true;
+                createParticles(this.x, this.y, this.character.specialEmoji);
+                
+                setTimeout(() => {
+                    gameState.specialMoveActive = false;
+                }, 2000);
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                if (gameState.specialMoveActive) {
+                    // Special move animation
+                    const spin = this.specialAnimation * 2;
+                    ctx.rotate(spin);
+                    const scale = 1 + Math.sin(this.specialAnimation * 3) * 0.2;
+                    ctx.scale(scale, scale);
+                    
+                    // Special effects
+                    ctx.font = '60px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(this.character.specialEmoji, 0, -50);
+                } else {
+                    // Regular dance animation
+                    ctx.rotate(Math.sin(this.animation * 2) * 0.1);
+                    ctx.translate(0, this.danceMove);
+                }
+                
+                // Draw character
+                ctx.font = '80px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.character.emoji, 0, 0);
+                
+                // Draw character name
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#fff';
+                ctx.fillText(this.character.name, 0, 60);
+                
+                ctx.restore();
+            }
+        }
+
+        // Particle effects
+        function createParticles(x, y, emoji) {
+            for (let i = 0; i < 8; i++) {
+                gameState.particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    emoji: emoji,
+                    lifetime: 1000,
+                    created: Date.now()
+                });
+            }
+        }
+
+        function updateParticles() {
+            gameState.particles = gameState.particles.filter(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.vy += 0.2;
+                particle.vx *= 0.98;
+                
+                return Date.now() - particle.created < particle.lifetime;
+            });
+        }
+
+        function drawParticles() {
+            gameState.particles.forEach(particle => {
+                const opacity = Math.max(0, 1 - (Date.now() - particle.created) / particle.lifetime);
+                ctx.save();
+                ctx.globalAlpha = opacity;
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(particle.emoji, particle.x, particle.y);
+                ctx.restore();
+            });
+        }
+
+        // Initialize game objects
+        let dancer = new Dancer(gameState.selectedCharacter);
+
+        // Generate notes
+        function generateNotes() {
+            const currentTime = Date.now();
+            const song = songs[gameState.currentSong];
+            const noteInterval = 60000 / song.bpm; // Convert BPM to milliseconds
+            
+            if (currentTime - gameState.lastNoteTime > noteInterval) {
+                const pattern = notePatterns[Math.floor(Math.random() * notePatterns.length)];
+                const key = pattern[Math.floor(Math.random() * pattern.length)];
+                const lane = ['a', 's', 'd', 'f', 'j', 'k', 'l'].indexOf(key);
+                
+                gameState.notes.push(new Note(key, lane));
+                gameState.lastNoteTime = currentTime;
+            }
+        }
+
+        // Game functions
+        function updateGame() {
+            if (gameState.gameOver) return;
+            
+            // Check song completion
+            if (Date.now() - gameState.songStartTime > gameState.songDuration) {
+                endGame();
+                return;
+            }
+            
+            // Generate notes
+            generateNotes();
+            
+            // Update dancer
+            dancer.update();
+            
+            // Update notes
+            gameState.notes = gameState.notes.filter(note => {
+                note.update();
+                return !note.hit && !note.missed && note.y < canvas.height + 50;
+            });
+            
+            // Update particles
+            updateParticles();
+            
+            // Update special move energy
+            if (gameState.specialMoveEnergy >= 100 && !gameState.specialMoveReady) {
+                gameState.specialMoveReady = true;
+                document.getElementById('specialMoveReady').textContent = 'SPECIAL MOVE READY! Press SPACE!';
+            }
+            
+            updateUI();
+        }
+
+        function drawGame() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw dance floor
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#2c3e50');
+            gradient.addColorStop(1, '#34495e');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw disco ball effect
+            const time = Date.now() * 0.001;
+            for (let i = 0; i < 5; i++) {
+                const x = canvas.width / 2 + Math.cos(time + i) * 100;
+                const y = 50 + Math.sin(time + i) * 20;
+                const spotGradient = ctx.createRadialGradient(x, y, 0, x, y, 150);
+                spotGradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+                spotGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = spotGradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // Draw judge line
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(50, gameState.judgeLineY);
+            ctx.lineTo(canvas.width - 50, gameState.judgeLineY);
+            ctx.stroke();
+            
+            // Draw lane guides
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            const lanes = ['a', 's', 'd', 'f', 'j', 'k', 'l'];
+            lanes.forEach((lane, index) => {
+                const x = 100 + index * 100;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            });
+            
+            // Draw notes
+            gameState.notes.forEach(note => note.draw());
+            
+            // Draw dancer
+            dancer.draw();
+            
+            // Draw particles
+            drawParticles();
+            
+            // Draw combo indicator
+            if (gameState.combo > 5) {
+                ctx.save();
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#feca57';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 3;
+                ctx.fillText(`${gameState.combo}x COMBO!`, canvas.width / 2, 50);
+                ctx.strokeText(`${gameState.combo}x COMBO!`, canvas.width / 2, 50);
+                ctx.restore();
+            }
+        }
+
+        function gameLoop() {
+            updateGame();
+            drawGame();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function updateUI() {
+            document.getElementById('scoreCount').textContent = gameState.score;
+            document.getElementById('comboCount').textContent = gameState.combo;
+            document.getElementById('perfectCount').textContent = gameState.perfectHits;
+            document.getElementById('songName').textContent = songs[gameState.currentSong].name;
+            document.getElementById('specialMoveFill').style.width = `${gameState.specialMoveEnergy}%`;
+        }
+
+        function showComboIndicator(text = 'PERFECT!') {
+            const indicator = document.getElementById('comboIndicator');
+            indicator.textContent = text;
+            indicator.classList.add('show');
+            
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 1000);
+        }
+
+        function endGame() {
+            gameState.gameOver = true;
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalPerfect').textContent = gameState.perfectHits;
+            document.getElementById('finalCombo').textContent = gameState.maxCombo;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+
+        function restartGame() {
+            gameState = {
+                score: 0,
+                combo: 0,
+                maxCombo: 0,
+                perfectHits: 0,
+                currentSong: (gameState.currentSong + 1) % songs.length,
+                gameOver: false,
+                selectedCharacter: gameState.selectedCharacter,
+                specialMoveEnergy: 0,
+                specialMoveReady: false,
+                specialMoveActive: false,
+                notes: [],
+                particles: [],
+                lastNoteTime: 0,
+                noteSpeed: 2 + (gameState.currentSong * 0.5),
+                songStartTime: Date.now(),
+                songDuration: 60000,
+                judgeLineY: 320
+            };
+            
+            dancer = new Dancer(gameState.selectedCharacter);
+            
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('specialMoveReady').textContent = '';
+            updateUI();
+        }
+
+        // Event listeners
+        document.addEventListener('keydown', (e) => {
+            if (gameState.gameOver) return;
+            
+            const key = e.key.toLowerCase();
+            
+            // Handle dance keys
+            if (['a', 's', 'd', 'f', 'j', 'k', 'l'].includes(key)) {
+                const keyElement = document.querySelector(`[data-key="${key}"]`);
+                keyElement.classList.add('active');
+                
+                let hit = false;
+                for (let note of gameState.notes) {
+                    const result = note.checkHit(key);
+                    if (result) {
+                        keyElement.classList.add(result);
+                        hit = true;
+                        break;
+                    }
+                }
+                
+                if (!hit) {
+                    keyElement.classList.add('miss');
+                }
+                
+                setTimeout(() => {
+                    keyElement.classList.remove('active', 'perfect', 'good', 'miss');
+                }, 200);
+            }
+            
+            // Handle special move
+            if (key === ' ' && gameState.specialMoveReady) {
+                e.preventDefault();
+                dancer.performSpecialMove();
+                gameState.specialMoveEnergy = 0;
+                gameState.specialMoveReady = false;
+                document.getElementById('specialMoveReady').textContent = '';
+                
+                // Bonus points for special move
+                gameState.score += 500;
+                createParticles(dancer.x, dancer.y, '🌟');
+            }
+        });
+
+        // Character selector
+        document.querySelectorAll('.character-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!gameState.gameOver) {
+                    document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    gameState.selectedCharacter = card.dataset.character;
+                    dancer = new Dancer(gameState.selectedCharacter);
+                }
+            });
+        });
+
+        // Start game
+        gameLoop();
+    </script>
+</body>
+</html>

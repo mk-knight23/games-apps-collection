@@ -1,0 +1,18 @@
+Title: Office Prank Wars
+Genre: Multiplayer Party Game / Strategy
+Objective: Out-prank your coworkers in a hilarious office environment while avoiding getting caught by the grumpy boss.
+Gameplay Mechanics:
+- Turn-based multiplayer where players set up elaborate prank traps on office colleagues
+- Choose from various prank types: whoopee cushions, stapler in jello, fake spiders, computer mouse pranks
+- Each prank has different risk/reward levels and hilarious animated reactions
+- Avoid the "Boss Patrol" - a grumpy manager who walks randomly through the office
+- Collect "Suspicion Points" - too many and you're sent to HR (game over)
+- Power-ups include "Invisibility Cloak" (briefcase), "Distraction Device" (loud phone ring), and "Blame Shifter"
+- Office environments become progressively larger and more complex (cubicles, break room, executive floor)
+Target Audience: Office workers and party game enthusiasts aged 16-45
+Monetization Strategy:
+- Free-to-play with optional premium prank packages
+- Cosmetic purchases: different office themes, character outfits, prank skins
+- "Remove Ads" premium version
+- Seasonal events with holiday-themed pranks and office decorations
+- Team battle pass with exclusive rewards

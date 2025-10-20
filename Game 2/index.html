@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clumsy Cat Chaos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .game-title {
+            font-size: 2.5em;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+            animation: wobble 3s infinite;
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .level-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .level-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .level-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-btn.selected {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: scale(1.1);
+        }
+
+        .level-btn.locked {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        canvas {
+            border: 3px solid #fff;
+            border-radius: 10px;
+            display: block;
+            background: linear-gradient(to bottom, #ffeaa7 0%, #dfe6e9 100%);
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+
+        .game-over h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .restart-btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 15px;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .power-ups {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .power-up-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .power-up-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .power-up-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">🐱 Clumsy Cat Chaos 🏠</h1>
+            <div class="game-stats">
+                <div>🐾 Lives: <span id="livesCount">9</span></div>
+                <div>🏆 Score: <span id="scoreCount">0</span></div>
+                <div>⏱️ Time: <span id="timeCount">0</span></div>
+            </div>
+            <div class="level-selector">
+                <button class="level-btn selected" data-level="1">🏠 Kitchen</button>
+                <button class="level-btn" data-level="2">🛋️ Living Room</button>
+                <button class="level-btn locked" data-level="3">🚿 Bathroom</button>
+                <button class="level-btn locked" data-level="4">🛏️ Bedroom</button>
+            </div>
+            <div class="power-ups">
+                <button class="power-up-btn" id="catnipBtn">🌿 Catnip (3)</button>
+                <button class="power-up-btn" id="slowmoBtn">⏰ Slow Motion (2)</button>
+                <button class="power-up-btn" id="shieldBtn">🛡️ Shield (1)</button>
+            </div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div class="controls">
+            <p>🎮 Use ARROW KEYS or WASD to move the clumsy cat through the room!</p>
+            <p>⚠️ Avoid breaking objects or you'll lose a life!</p>
+        </div>
+        <div class="game-over" id="gameOver">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <p>Time Survived: <span id="finalTime">0</span>s</p>
+            <button class="restart-btn" onclick="restartGame()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game state
+        let gameState = {
+            lives: 9,
+            score: 0,
+            time: 0,
+            currentLevel: 1,
+            gameOver: false,
+            catnip: 3,
+            slowmo: 2,
+            shield: 1,
+            catnipActive: false,
+            slowmoActive: false,
+            shieldActive: false,
+            startTime: Date.now(),
+            lastTime: Date.now()
+        };
+
+        // Level configurations
+        const levels = {
+            1: {
+                name: 'Kitchen',
+                obstacles: [
+                    { x: 200, y: 200, width: 60, height: 40, emoji: '🍽️', breakable: true, points: 50 },
+                    { x: 400, y: 150, width: 50, height: 50, emoji: '🥛', breakable: true, points: 30 },
+                    { x: 600, y: 250, width: 40, height: 60, emoji: '🍶', breakable: true, points: 40 },
+                    { x: 300, y: 400, width: 80, height: 40, emoji: '🍳', breakable: true, points: 60 },
+                    { x: 500, y: 450, width: 60, height: 30, emoji: '🧂', breakable: true, points: 20 },
+                    { x: 100, y: 350, width: 70, height: 50, emoji: '🍴', breakable: true, points: 35 }
+                ],
+                walls: [
+                    { x: 0, y: 0, width: 800, height: 20 },
+                    { x: 0, y: 580, width: 800, height: 20 },
+                    { x: 0, y: 0, width: 20, height: 600 },
+                    { x: 780, y: 0, width: 20, height: 600 }
+                ]
+            },
+            2: {
+                name: 'Living Room',
+                obstacles: [
+                    { x: 150, y: 180, width: 100, height: 80, emoji: '📺', breakable: true, points: 100 },
+                    { x: 350, y: 300, width: 120, height: 60, emoji: '🛋️', breakable: false, points: 0 },
+                    { x: 550, y: 200, width: 60, height: 40, emoji: '🏺', breakable: true, points: 45 },
+                    { x: 250, y: 450, width: 80, height: 80, emoji: '🪴', breakable: true, points: 55 },
+                    { x: 450, y: 150, width: 50, height: 50, emoji: '🖼️', breakable: true, points: 25 },
+                    { x: 650, y: 400, width: 70, height: 50, emoji: '📚', breakable: true, points: 40 }
+                ],
+                walls: [
+                    { x: 0, y: 0, width: 800, height: 20 },
+                    { x: 0, y: 580, width: 800, height: 20 },
+                    { x: 0, y: 0, width: 20, height: 600 },
+                    { x: 780, y: 0, width: 20, height: 600 }
+                ]
+            },
+            3: {
+                name: 'Bathroom',
+                obstacles: [
+                    { x: 300, y: 100, width: 100, height: 120, emoji: '🚿', breakable: false, points: 0 },
+                    { x: 500, y: 150, width: 80, height: 100, emoji: '🚽', breakable: false, points: 0 },
+                    { x: 150, y: 250, width: 40, height: 60, emoji: '🧴', breakable: true, points: 30 },
+                    { x: 200, y: 400, width: 50, height: 30, emoji: '🧼', breakable: true, points: 25 },
+                    { x: 400, y: 350, width: 60, height: 40, emoji: '🪒', breakable: true, points: 35 },
+                    { x: 600, y: 300, width: 45, height: 45, emoji: '🦷', breakable: true, points: 50 }
+                ],
+                walls: [
+                    { x: 0, y: 0, width: 800, height: 20 },
+                    { x: 0, y: 580, width: 800, height: 20 },
+                    { x: 0, y: 0, width: 20, height: 600 },
+                    { x: 780, y: 0, width: 20, height: 600 }
+                ]
+            },
+            4: {
+                name: 'Bedroom',
+                obstacles: [
+                    { x: 200, y: 200, width: 150, height: 200, emoji: '🛏️', breakable: false, points: 0 },
+                    { x: 450, y: 150, width: 80, height: 100, emoji: '🗄️', breakable: false, points: 0 },
+                    { x: 100, y: 300, width: 40, height: 40, emoji: '⏰', breakable: true, points: 45 },
+                    { x: 350, y: 400, width: 60, height: 30, emoji: '📖', breakable: true, points: 20 },
+                    { x: 550, y: 350, width: 50, height: 50, emoji: '🧸', breakable: true, points: 15 },
+                    { x: 650, y: 250, width: 45, height: 60, emoji: '💡', breakable: true, points: 40 }
+                ],
+                walls: [
+                    { x: 0, y: 0, width: 800, height: 20 },
+                    { x: 0, y: 580, width: 800, height: 20 },
+                    { x: 0, y: 0, width: 20, height: 600 },
+                    { x: 780, y: 0, width: 20, height: 600 }
+                ]
+            }
+        };
+
+        // Cat class with physics
+        class Cat {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = 0;
+                this.vy = 0;
+                this.width = 40;
+                this.height = 30;
+                this.speed = 3;
+                this.clumsiness = 0.15;
+                this.rotation = 0;
+                this.angularVelocity = 0;
+                this.tripping = false;
+                this.tripTimer = 0;
+                this.emoji = '🐱';
+                this.tailAnimation = 0;
+            }
+
+            update(deltaTime) {
+                const speedMultiplier = gameState.slowmoActive ? 0.3 : 1;
+                
+                // Apply clumsiness (random movements)
+                if (Math.random() < this.clumsiness && !this.tripping) {
+                    this.vx += (Math.random() - 0.5) * 2;
+                    this.vy += (Math.random() - 0.5) * 2;
+                    this.angularVelocity += (Math.random() - 0.5) * 0.2;
+                }
+
+                // Apply velocity
+                this.x += this.vx * speedMultiplier;
+                this.y += this.vy * speedMultiplier;
+                this.rotation += this.angularVelocity * speedMultiplier;
+
+                // Friction
+                this.vx *= 0.95;
+                this.vy *= 0.95;
+                this.angularVelocity *= 0.9;
+
+                // Handle tripping
+                if (this.tripping) {
+                    this.tripTimer -= deltaTime;
+                    if (this.tripTimer <= 0) {
+                        this.tripping = false;
+                        this.rotation = 0;
+                        this.angularVelocity = 0;
+                    } else {
+                        // Wobble while tripping
+                        this.rotation = Math.sin(this.tripTimer * 0.01) * 0.5;
+                    }
+                }
+
+                // Random trip chance
+                if (!this.tripping && Math.random() < 0.005) {
+                    this.trip();
+                }
+
+                // Tail animation
+                this.tailAnimation += 0.1;
+
+                // Check collisions
+                this.checkCollisions();
+            }
+
+            trip() {
+                this.tripping = true;
+                this.tripTimer = 1000;
+                this.angularVelocity = (Math.random() - 0.5) * 0.5;
+                createParticles(this.x, this.y, '💫');
+            }
+
+            move(dx, dy) {
+                if (!this.tripping) {
+                    this.vx += dx * this.speed;
+                    this.vy += dy * this.speed;
+                    
+                    // Add some clumsiness to movement
+                    if (gameState.catnipActive) {
+                        this.vx += (Math.random() - 0.5) * 4;
+                        this.vy += (Math.random() - 0.5) * 4;
+                    }
+                }
+            }
+
+            checkCollisions() {
+                const level = levels[gameState.currentLevel];
+                
+                // Check wall collisions
+                level.walls.forEach(wall => {
+                    if (this.rectCollision(this, wall)) {
+                        this.resolveCollision(wall);
+                    }
+                });
+
+                // Check obstacle collisions
+                level.obstacles.forEach(obstacle => {
+                    if (this.rectCollision(this, obstacle)) {
+                        if (obstacle.breakable) {
+                            this.breakObstacle(obstacle);
+                        } else {
+                            this.resolveCollision(obstacle);
+                        }
+                    }
+                });
+            }
+
+            rectCollision(rect1, rect2) {
+                return rect1.x < rect2.x + rect2.width &&
+                       rect1.x + rect1.width > rect2.x &&
+                       rect1.y < rect2.y + rect2.height &&
+                       rect1.y + rect1.height > rect2.y;
+            }
+
+            resolveCollision(wall) {
+                // Simple collision resolution
+                const overlapX = Math.min(this.x + this.width - wall.x, wall.x + wall.width - this.x);
+                const overlapY = Math.min(this.y + this.height - wall.y, wall.y + wall.height - this.y);
+
+                if (overlapX < overlapY) {
+                    if (this.x < wall.x) {
+                        this.x = wall.x - this.width;
+                    } else {
+                        this.x = wall.x + wall.width;
+                    }
+                    this.vx *= -0.5;
+                } else {
+                    if (this.y < wall.y) {
+                        this.y = wall.y - this.height;
+                    } else {
+                        this.y = wall.y + wall.height;
+                    }
+                    this.vy *= -0.5;
+                }
+
+                // Trip on collision
+                if (!this.tripping && Math.random() < 0.3) {
+                    this.trip();
+                }
+            }
+
+            breakObstacle(obstacle) {
+                if (!gameState.shieldActive) {
+                    gameState.lives--;
+                    createParticles(obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2, '💥');
+                    
+                    // Remove obstacle
+                    const level = levels[gameState.currentLevel];
+                    const index = level.obstacles.indexOf(obstacle);
+                    if (index > -1) {
+                        level.obstacles.splice(index, 1);
+                        gameState.score += obstacle.points;
+                    }
+                } else {
+                    createParticles(obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2, '🛡️');
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width/2, this.y + this.height/2);
+                ctx.rotate(this.rotation);
+                
+                // Draw cat with wobble
+                const wobble = Math.sin(this.tailAnimation) * 2;
+                ctx.font = '30px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.emoji, wobble, this.tripping ? 5 : 0);
+                
+                // Draw tail
+                ctx.beginPath();
+                ctx.moveTo(-15, 0);
+                ctx.quadraticCurveTo(-25, Math.sin(this.tailAnimation * 2) * 5, -30, Math.sin(this.tailAnimation * 3) * 8);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                ctx.restore();
+            }
+        }
+
+        // Particle effects
+        let particles = [];
+
+        function createParticles(x, y, emoji) {
+            for (let i = 0; i < 8; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    emoji: emoji,
+                    lifetime: 1500,
+                    created: Date.now()
+                });
+            }
+        }
+
+        function updateParticles() {
+            particles = particles.filter(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.vy += 0.2; // gravity
+                particle.vx *= 0.98; // friction
+                
+                return Date.now() - particle.created < particle.lifetime;
+            });
+        }
+
+        function drawParticles() {
+            particles.forEach(particle => {
+                const opacity = Math.max(0, 1 - (Date.now() - particle.created) / particle.lifetime);
+                ctx.save();
+                ctx.globalAlpha = opacity;
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(particle.emoji, particle.x, particle.y);
+                ctx.restore();
+            });
+        }
+
+        // Game objects
+        let cat = new Cat(100, 300);
+        let keys = {};
+
+        // Input handling
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Game functions
+        function handleInput() {
+            if (keys['arrowleft'] || keys['a']) cat.move(-1, 0);
+            if (keys['arrowright'] || keys['d']) cat.move(1, 0);
+            if (keys['arrowup'] || keys['w']) cat.move(0, -1);
+            if (keys['arrowdown'] || keys['s']) cat.move(0, 1);
+        }
+
+        function updateGame() {
+            if (gameState.gameOver) return;
+            
+            const currentTime = Date.now();
+            const deltaTime = currentTime - gameState.lastTime;
+            gameState.lastTime = currentTime;
+            
+            // Update time
+            gameState.time = Math.floor((currentTime - gameState.startTime) / 1000);
+            
+            // Handle input
+            handleInput();
+            
+            // Update cat
+            cat.update(deltaTime);
+            
+            // Update particles
+            updateParticles();
+            
+            // Update power-up timers
+            if (gameState.catnipActive && currentTime - gameState.catnipStartTime > 5000) {
+                gameState.catnipActive = false;
+            }
+            if (gameState.slowmoActive && currentTime - gameState.slowmoStartTime > 3000) {
+                gameState.slowmoActive = false;
+            }
+            if (gameState.shieldActive && currentTime - gameState.shieldStartTime > 4000) {
+                gameState.shieldActive = false;
+            }
+            
+            // Check game over
+            if (gameState.lives <= 0) {
+                gameState.gameOver = true;
+                showGameOver();
+            }
+            
+            // Unlock levels based on score
+            if (gameState.score >= 200) {
+                document.querySelector('[data-level="2"]').classList.remove('locked');
+            }
+            if (gameState.score >= 500) {
+                document.querySelector('[data-level="3"]').classList.remove('locked');
+            }
+            if (gameState.score >= 1000) {
+                document.querySelector('[data-level="4"]').classList.remove('locked');
+            }
+            
+            updateUI();
+        }
+
+        function drawGame() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw level background
+            const level = levels[gameState.currentLevel];
+            
+            // Draw floor pattern
+            ctx.fillStyle = 'rgba(139, 69, 19, 0.1)';
+            for (let i = 0; i < canvas.width; i += 40) {
+                for (let j = 0; j < canvas.height; j += 40) {
+                    if ((i + j) % 80 === 0) {
+                        ctx.fillRect(i, j, 40, 40);
+                    }
+                }
+            }
+            
+            // Draw walls
+            ctx.fillStyle = '#8B4513';
+            level.walls.forEach(wall => {
+                ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+            });
+            
+            // Draw obstacles
+            level.obstacles.forEach(obstacle => {
+                ctx.font = `${Math.min(obstacle.width, obstacle.height)}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(obstacle.emoji, obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2);
+            });
+            
+            // Draw particles
+            drawParticles();
+            
+            // Draw cat
+            cat.draw();
+            
+            // Draw power-up indicators
+            if (gameState.catnipActive) {
+                ctx.fillStyle = 'rgba(0, 255, 0, 0.3)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            if (gameState.shieldActive) {
+                ctx.strokeStyle = 'rgba(0, 100, 255, 0.5)';
+                ctx.lineWidth = 5;
+                ctx.strokeRect(cat.x - 5, cat.y - 5, cat.width + 10, cat.height + 10);
+            }
+        }
+
+        function gameLoop() {
+            updateGame();
+            drawGame();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function updateUI() {
+            document.getElementById('livesCount').textContent = gameState.lives;
+            document.getElementById('scoreCount').textContent = gameState.score;
+            document.getElementById('timeCount').textContent = gameState.time;
+            document.getElementById('catnipBtn').textContent = `🌿 Catnip (${gameState.catnip})`;
+            document.getElementById('slowmoBtn').textContent = `⏰ Slow Motion (${gameState.slowmo})`;
+            document.getElementById('shieldBtn').textContent = `🛡️ Shield (${gameState.shield})`;
+            
+            // Update power-up button states
+            document.getElementById('catnipBtn').disabled = gameState.catnip <= 0 || gameState.catnipActive;
+            document.getElementById('slowmoBtn').disabled = gameState.slowmo <= 0 || gameState.slowmoActive;
+            document.getElementById('shieldBtn').disabled = gameState.shield <= 0 || gameState.shieldActive;
+        }
+
+        function showGameOver() {
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalTime').textContent = gameState.time;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+
+        function restartGame() {
+            gameState = {
+                lives: 9,
+                score: 0,
+                time: 0,
+                currentLevel: gameState.currentLevel,
+                gameOver: false,
+                catnip: 3,
+                slowmo: 2,
+                shield: 1,
+                catnipActive: false,
+                slowmoActive: false,
+                shieldActive: false,
+                startTime: Date.now(),
+                lastTime: Date.now()
+            };
+            
+            // Reset level obstacles
+            const levelName = ['', 'Kitchen', 'Living Room', 'Bathroom', 'Bedroom'][gameState.currentLevel];
+            levels[gameState.currentLevel] = JSON.parse(JSON.stringify(levels[gameState.currentLevel]));
+            
+            cat = new Cat(100, 300);
+            particles = [];
+            
+            document.getElementById('gameOver').style.display = 'none';
+            updateUI();
+        }
+
+        // Level selector
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (!btn.classList.contains('locked')) {
+                    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    gameState.currentLevel = parseInt(btn.dataset.level);
+                    restartGame();
+                }
+            });
+        });
+
+        // Power-up buttons
+        document.getElementById('catnipBtn').addEventListener('click', () => {
+            if (gameState.catnip > 0 && !gameState.catnipActive) {
+                gameState.catnip--;
+                gameState.catnipActive = true;
+                gameState.catnipStartTime = Date.now();
+                createParticles(cat.x + cat.width/2, cat.y + cat.height/2, '🌿');
+            }
+        });
+
+        document.getElementById('slowmoBtn').addEventListener('click', () => {
+            if (gameState.slowmo > 0 && !gameState.slowmoActive) {
+                gameState.slowmo--;
+                gameState.slowmoActive = true;
+                gameState.slowmoStartTime = Date.now();
+                createParticles(cat.x + cat.width/2, cat.y + cat.height/2, '⏰');
+            }
+        });
+
+        document.getElementById('shieldBtn').addEventListener('click', () => {
+            if (gameState.shield > 0 && !gameState.shieldActive) {
+                gameState.shield--;
+                gameState.shieldActive = true;
+                gameState.shieldStartTime = Date.now();
+                createParticles(cat.x + cat.width/2, cat.y + cat.height/2, '🛡️');
+            }
+        });
+
+        // Start game
+        gameLoop();
+    </script>
+</body>
+</html>

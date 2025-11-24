@@ -1,519 +1,650 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games Apps Collection - Fun & Hilarious Games</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 Ultimate Games Collection - AI-Powered Gaming Hub</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      overflow-x: hidden;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    .header {
+      text-align: center;
+      padding: 60px 20px;
+      position: relative;
+    }
 
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-            animation: fadeInDown 1s ease;
-        }
+    .header h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      animation: glow 2s ease-in-out infinite;
+    }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    @keyframes glow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
 
-        h1 {
-            font-size: 3.5em;
-            color: white;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-            margin-bottom: 10px;
-            animation: bounce 2s infinite;
-        }
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
-        }
+    .stats-bar {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 40px 0;
+    }
 
-        .subtitle {
-            font-size: 1.5em;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 30px;
-        }
+    .stat-card {
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-align: center;
+      min-width: 150px;
+    }
 
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--accent-primary);
+    }
 
-        .game-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 1s ease backwards;
-        }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 5px;
+    }
 
-        .game-card:nth-child(1) { animation-delay: 0.1s; }
-        .game-card:nth-child(2) { animation-delay: 0.2s; }
-        .game-card:nth-child(3) { animation-delay: 0.3s; }
-        .game-card:nth-child(4) { animation-delay: 0.4s; }
-        .game-card:nth-child(5) { animation-delay: 0.5s; }
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .game-card {
+      padding: 30px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .game-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
 
-        .game-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+    .game-card:hover::before {
+      opacity: 0.1;
+    }
 
-        .game-icon {
-            font-size: 3em;
-            margin-right: 15px;
-            animation: wobble 3s infinite;
-        }
+    .game-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px var(--shadow);
+    }
 
-        @keyframes wobble {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
+    .game-card > * {
+      position: relative;
+      z-index: 1;
+    }
 
-        .game-title {
-            font-size: 1.8em;
-            color: #333;
-            margin-bottom: 5px;
-        }
+    .game-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+    }
 
-        .game-genre {
-            font-size: 1em;
-            color: #666;
-            font-style: italic;
-        }
+    .game-title {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
 
-        .game-preview {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4em;
-            position: relative;
-            overflow: hidden;
-        }
+    .game-desc {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
 
-        .game-preview::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
+    .game-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
+    .feature-tag {
+      padding: 6px 12px;
+      background: var(--bg-tertiary);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
 
-        .game-description {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
+    .game-stats {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      padding: 15px;
+      background: var(--bg-tertiary);
+      border-radius: 10px;
+    }
 
-        .game-features {
-            margin-bottom: 20px;
-        }
+    .game-stat {
+      text-align: center;
+    }
 
-        .feature-tag {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            margin: 3px;
-        }
+    .game-stat-value {
+      font-weight: bold;
+      color: var(--accent-primary);
+    }
 
-        .play-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
+    .play-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
 
-        .play-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(240, 87, 108, 0.4);
-        }
+    .ai-panel {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      max-height: 500px;
+      border-radius: 20px;
+      padding: 20px;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
 
-        .difficulty-indicator {
-            display: flex;
-            align-items: center;
-            margin-top: 15px;
-        }
+    .ai-panel.active {
+      transform: translateX(0);
+    }
 
-        .difficulty-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-right: 10px;
-        }
+    .ai-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px var(--shadow);
+      z-index: 998;
+      transition: all 0.3s ease;
+    }
 
-        .difficulty-stars {
-            color: #ffd700;
-        }
+    .ai-toggle:hover {
+      transform: scale(1.1);
+    }
 
-        .how-to-play {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-        }
+    .ai-messages {
+      max-height: 300px;
+      overflow-y: auto;
+      margin: 20px 0;
+    }
 
-        .how-to-play h4 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
+    .ai-message {
+      padding: 12px;
+      background: var(--bg-tertiary);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      animation: slideIn 0.3s ease;
+    }
 
-        .how-to-play ul {
-            list-style: none;
-            padding: 0;
-        }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .how-to-play li {
-            color: #555;
-            margin: 5px 0;
-            padding-left: 20px;
-            position: relative;
-        }
+    .filters {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
 
-        .how-to-play li::before {
-            content: '🎮';
-            position: absolute;
-            left: 0;
-        }
+    .filter-btn {
+      padding: 10px 20px;
+      border: 2px solid var(--accent-primary);
+      background: transparent;
+      color: var(--text-primary);
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-        footer {
-            text-align: center;
-            color: white;
-            margin-top: 50px;
-            padding: 20px;
-        }
+    .filter-btn.active {
+      background: var(--accent-primary);
+      color: white;
+    }
 
-        .investor-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            margin-top: 50px;
-            text-align: center;
-            color: white;
-        }
+    .search-bar {
+      max-width: 600px;
+      margin: 30px auto;
+      position: relative;
+    }
 
-        .investor-section h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
+    .search-bar input {
+      width: 100%;
+      padding: 15px 50px 15px 20px;
+      border: 2px solid var(--glass-border);
+      background: var(--glass-bg);
+      border-radius: 50px;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
 
-        .investor-pitch {
-            font-size: 1.2em;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+    }
 
-        .pitch-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #333;
-            text-decoration: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-        }
+    .search-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+    }
 
-        .pitch-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
-        }
+    @media (max-width: 768px) {
+      .games-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .ai-panel {
+        width: calc(100% - 40px);
+        bottom: 90px;
+      }
+    }
 
-        @media (max-width: 768px) {
-            .games-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 2.5em;
-            }
-            
-            .game-card {
-                padding: 20px;
-            }
-        }
-    </style>
+    .leaderboard {
+      margin: 40px 0;
+      padding: 30px;
+      border-radius: 20px;
+    }
+
+    .leaderboard-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .leaderboard-list {
+      display: grid;
+      gap: 15px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .leaderboard-item:hover {
+      transform: translateX(5px);
+    }
+
+    .rank {
+      font-size: 1.5rem;
+      font-weight: bold;
+      min-width: 50px;
+    }
+
+    .rank.gold { color: #ffd700; }
+    .rank.silver { color: #c0c0c0; }
+    .rank.bronze { color: #cd7f32; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎮 Games Apps Collection</h1>
-            <p class="subtitle">Experience the Ultimate Fun with Our Hilarious Game Series!</p>
-        </header>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <span id="theme-icon">🌙</span>
+  </button>
 
-        <div class="games-grid">
-            <!-- Game 1: Zombie Plant Defenders -->
-            <div class="game-card">
-                <div class="game-header">
-                    <div class="game-icon">🌱</div>
-                    <div>
-                        <h2 class="game-title">Zombie Plant Defenders</h2>
-                        <p class="game-genre">Tower Defense / Strategy</p>
-                    </div>
-                </div>
-                <div class="game-preview">🧟‍♂️🌻🧟‍♀️</div>
-                <p class="game-description">
-                    Defend your garden from hordes of dancing zombies! Place mutant plants with hilarious abilities to stop the zombie apocalypse with style!
-                </p>
-                <div class="game-features">
-                    <span class="feature-tag">🌻 Sunflowers</span>
-                    <span class="feature-tag">🌱 Peashooters</span>
-                    <span class="feature-tag">🥜 Wall-nuts</span>
-                    <span class="feature-tag">🌵 Chompers</span>
-                    <span class="feature-tag">🧟 Dancing Zombies</span>
-                </div>
-                <div class="difficulty-indicator">
-                    <span class="difficulty-label">Difficulty:</span>
-                    <span class="difficulty-stars">⭐⭐⭐</span>
-                </div>
-                <div class="how-to-play">
-                    <h4>🎯 How to Play:</h4>
-                    <ul>
-                        <li>Collect sun power to buy plants</li>
-                        <li>Click on the grid to place plants</li>
-                        <li>Protect your house from zombie waves</li>
-                        <li>Use special plants for tough situations</li>
-                        <li>Survive as many waves as possible!</li>
-                    </ul>
-                </div>
-                <a href="Game 1/index.html" class="play-button">🎮 Play Now</a>
-            </div>
-
-            <!-- Game 2: Clumsy Cat Chaos -->
-            <div class="game-card">
-                <div class="game-header">
-                    <div class="game-icon">🐱</div>
-                    <div>
-                        <h2 class="game-title">Clumsy Cat Chaos</h2>
-                        <p class="game-genre">Physics-based Puzzle</p>
-                    </div>
-                </div>
-                <div class="game-preview">🏠💥🐾</div>
-                <p class="game-description">
-                    Help a perpetually clumsy cat navigate through household environments without causing complete destruction. Physics-based chaos guaranteed!
-                </p>
-                <div class="game-features">
-                    <span class="feature-tag">🏠 Multiple Rooms</span>
-                    <span class="feature-tag">💥 Breakable Objects</span>
-                    <span class="feature-tag">🌿 Catnip Power</span>
-                    <span class="feature-tag">⏰ Slow Motion</span>
-                    <span class="feature-tag">🛡️ Shield Protection</span>
-                </div>
-                <div class="difficulty-indicator">
-                    <span class="difficulty-label">Difficulty:</span>
-                    <span class="difficulty-stars">⭐⭐⭐⭐</span>
-                </div>
-                <div class="how-to-play">
-                    <h4>🎯 How to Play:</h4>
-                    <ul>
-                        <li>Use WASD or Arrow keys to move the cat</li>
-                        <li>Avoid breaking household objects</li>
-                        <li>Navigate through increasingly complex rooms</li>
-                        <li>Use power-ups when in trouble</li>
-                        <li>Collect 9 lives and score points!</li>
-                    </ul>
-                </div>
-                <a href="Game 2/index.html" class="play-button">🎮 Play Now</a>
-            </div>
-
-            <!-- Game 3: Office Prank Wars -->
-            <div class="game-card">
-                <div class="game-header">
-                    <div class="game-icon">🏢</div>
-                    <div>
-                        <h2 class="game-title">Office Prank Wars</h2>
-                        <p class="game-genre">Multiplayer Strategy</p>
-                    </div>
-                </div>
-                <div class="game-preview">📱😂👔</div>
-                <p class="game-description">
-                    Out-prank your coworkers in this hilarious turn-based office comedy! Avoid the grumpy boss while becoming the ultimate office prankster!
-                </p>
-                <div class="game-features">
-                    <span class="feature-tag">🤣 Multiple Pranks</span>
-                    <span class="feature-tag">😠 Boss Patrol</span>
-                    <span class="feature-tag">👥 2-Player Mode</span>
-                    <span class="feature-tag">👜 Power-ups</span>
-                    <span class="feature-tag">⚠️ Suspicion System</span>
-                </div>
-                <div class="difficulty-indicator">
-                    <span class="difficulty-label">Difficulty:</span>
-                    <span class="difficulty-stars">⭐⭐⭐</span>
-                </div>
-                <div class="how-to-play">
-                    <h4>🎯 How to Play:</h4>
-                    <ul>
-                        <li>Take turns pranking coworkers</li>
-                        <li>Click on characters to prank them</li>
-                        <li>Avoid the boss patrol</li>
-                        <li>Manage your suspicion level</li>
-                        <li>First to 100 points wins!</li>
-                    </ul>
-                </div>
-                <a href="Game 3/index.html" class="play-button">🎮 Play Now</a>
-            </div>
-
-            <!-- Game 4: Dance Battle Seniors -->
-            <div class="game-card">
-                <div class="game-header">
-                    <div class="game-icon">🕺</div>
-                    <div>
-                        <h2 class="game-title">Dance Battle Seniors</h2>
-                        <p class="game-genre">Rhythm / Dancing</p>
-                    </div>
-                </div>
-                <div class="game-preview">💃🎵👵</div>
-                <p class="game-description">
-                    Help elderly characters win dance competitions with ridiculous moves! From hip replacement spins to walker shuffles, the seniors are ready to groove!
-                </p>
-                <div class="game-features">
-                    <span class="feature-tag">👵 Grandma Betty</span>
-                    <span class="feature-tag">👴 Grandpa Joe</span>
-                    <span class="feature-tag">🎵 Multiple Songs</span>
-                    <span class="feature-tag">🔥 Combo System</span>
-                    <span class="feature-tag">⭐ Special Moves</span>
-                </div>
-                <div class="difficulty-indicator">
-                    <span class="difficulty-label">Difficulty:</span>
-                    <span class="difficulty-stars">⭐⭐⭐⭐</span>
-                </div>
-                <div class="how-to-play">
-                    <h4>🎯 How to Play:</h4>
-                    <ul>
-                        <li>Press A,S,D,F,J,K,L keys to dance</li>
-                        <li>Hit notes at the right time for points</li>
-                        <li>Build combos for higher scores</li>
-                        <li>Press SPACE for special moves</li>
-                        <li>Choose your favorite senior dancer!</li>
-                    </ul>
-                </div>
-                <a href="Game 4/index.html" class="play-button">🎮 Play Now</a>
-            </div>
-
-            <!-- Game 5: Food Fight Frenzy -->
-            <div class="game-card">
-                <div class="game-header">
-                    <div class="game-icon">🍕</div>
-                    <div>
-                        <h2 class="game-title">Food Fight Frenzy</h2>
-                        <p class="game-genre">Action / Arcade</p>
-                    </div>
-                </div>
-                <div class="game-preview">🌮💥🍔</div>
-                <p class="game-description">
-                    Engage in epic food battles in various locations! Throw spaghetti, meatballs, and pies while avoiding angry chefs and janitors!
-                </p>
-                <div class="game-features">
-                    <span class="feature-tag">🍝 Multiple Foods</span>
-                    <span class="feature-tag">🏫 Various Locations</span>
-                    <span class="feature-tag">👥 2-Player Battles</span>
-                    <span class="feature-tag">🔥 Power-ups</span>
-                    <span class="feature-tag">👨‍🍳 Enemy AI</span>
-                </div>
-                <div class="difficulty-indicator">
-                    <span class="difficulty-label">Difficulty:</span>
-                    <span class="difficulty-stars">⭐⭐⭐⭐⭐</span>
-                </div>
-                <div class="how-to-play">
-                    <h4>🎯 How to Play:</h4>
-                    <ul>
-                        <li>Player 1: WASD to move, SPACE to throw</li>
-                        <li>Player 2: Arrow keys to move, ENTER to throw</li>
-                        <li>Hit your opponent with food</li>
-                        <li>Avoid chefs and janitors</li>
-                        <li>Last player standing wins!</li>
-                    </ul>
-                </div>
-                <a href="Game 5/index.html" class="play-button">🎮 Play Now</a>
-            </div>
+  <div class="container">
+    <header class="header">
+      <h1>🎮 Ultimate Games Collection</h1>
+      <p class="subtitle">AI-Powered Gaming Experience with 5 Unique Games</p>
+      
+      <div class="stats-bar">
+        <div class="stat-card glass">
+          <div class="stat-value" id="total-games">5</div>
+          <div class="stat-label">Games</div>
         </div>
-
-        <div class="investor-section">
-            <h2>🚀 Investment Opportunity</h2>
-            <p class="investor-pitch">
-                Join us in revolutionizing the mobile gaming industry with our unique collection of humorous, engaging games! 
-                Our games combine cutting-edge technology with irresistible comedy to create unforgettable gaming experiences 
-                that appeal to players of all ages. With proven engagement metrics and multiple monetization strategies, 
-                this is your chance to invest in the future of entertainment!
-            </p>
-            <a href="investor-presentation.html" class="pitch-button">📊 View Investor Presentation</a>
+        <div class="stat-card glass">
+          <div class="stat-value" id="total-plays">0</div>
+          <div class="stat-label">Total Plays</div>
         </div>
+        <div class="stat-card glass">
+          <div class="stat-value" id="best-score">0</div>
+          <div class="stat-label">Best Score</div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-value" id="play-time">0h</div>
+          <div class="stat-label">Play Time</div>
+        </div>
+      </div>
+    </header>
 
-        <footer>
-            <p>© 2024 Games Apps Collection | Made with ❤️ and lots of 😂</p>
-            <p>All games are built with modern web technologies and are optimized for the best gaming experience!</p>
-        </footer>
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search games..." oninput="filterGames()">
+      <span class="search-icon">🔍</span>
     </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterByType('all')">All Games</button>
+      <button class="filter-btn" onclick="filterByType('strategy')">Strategy</button>
+      <button class="filter-btn" onclick="filterByType('action')">Action</button>
+      <button class="filter-btn" onclick="filterByType('puzzle')">Puzzle</button>
+      <button class="filter-btn" onclick="filterByType('rhythm')">Rhythm</button>
+    </div>
+
+    <div class="games-grid" id="games-grid">
+      <div class="game-card glass" data-type="strategy" data-game="zombie-plant">
+        <span class="game-icon">🌱🧟</span>
+        <h2 class="game-title">Zombie Plant Defenders</h2>
+        <p class="game-desc">Defend your garden from dancing zombies using mutant plants with AI-powered enemy patterns!</p>
+        <div class="game-features">
+          <span class="feature-tag">🤖 AI Enemies</span>
+          <span class="feature-tag">🎯 Strategy</span>
+          <span class="feature-tag">⚡ Power-ups</span>
+          <span class="feature-tag">🏆 Achievements</span>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="zombie-plant-plays">0</div>
+            <div>Plays</div>
+          </div>
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="zombie-plant-best">0</div>
+            <div>Best</div>
+          </div>
+        </div>
+        <button class="btn play-btn" onclick="playGame('games/zombie-plant-defenders/index.html')">Play Now 🎮</button>
+      </div>
+
+      <div class="game-card glass" data-type="puzzle" data-game="clumsy-cat">
+        <span class="game-icon">🐱🏠</span>
+        <h2 class="game-title">Clumsy Cat Chaos</h2>
+        <p class="game-desc">Navigate a clumsy cat through obstacles with realistic physics and AI-assisted difficulty adjustment!</p>
+        <div class="game-features">
+          <span class="feature-tag">🎮 Physics</span>
+          <span class="feature-tag">🤖 Smart AI</span>
+          <span class="feature-tag">🎨 Ragdoll</span>
+          <span class="feature-tag">⭐ Levels</span>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="clumsy-cat-plays">0</div>
+            <div>Plays</div>
+          </div>
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="clumsy-cat-best">0</div>
+            <div>Best</div>
+          </div>
+        </div>
+        <button class="btn play-btn" onclick="playGame('games/clumsy-cat-chaos/index.html')">Play Now 🎮</button>
+      </div>
+
+      <div class="game-card glass" data-type="strategy" data-game="office-prank">
+        <span class="game-icon">🏢😂</span>
+        <h2 class="game-title">Office Prank Wars</h2>
+        <p class="game-desc">Out-prank coworkers in this turn-based comedy with AI opponents and boss patrol mechanics!</p>
+        <div class="game-features">
+          <span class="feature-tag">🎭 Multiplayer</span>
+          <span class="feature-tag">🤖 AI Players</span>
+          <span class="feature-tag">🎯 Turn-based</span>
+          <span class="feature-tag">😂 Comedy</span>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="office-prank-plays">0</div>
+            <div>Plays</div>
+          </div>
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="office-prank-best">0</div>
+            <div>Best</div>
+          </div>
+        </div>
+        <button class="btn play-btn" onclick="playGame('games/office-prank-wars/index.html')">Play Now 🎮</button>
+      </div>
+
+      <div class="game-card glass" data-type="rhythm" data-game="dance-battle">
+        <span class="game-icon">🕺💃</span>
+        <h2 class="game-title">Dance Battle Seniors</h2>
+        <p class="game-desc">Rhythm game with elderly dancers, combo systems, and AI-powered beat detection!</p>
+        <div class="game-features">
+          <span class="feature-tag">🎵 Rhythm</span>
+          <span class="feature-tag">🤖 Beat AI</span>
+          <span class="feature-tag">⚡ Combos</span>
+          <span class="feature-tag">🎪 Characters</span>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="dance-battle-plays">0</div>
+            <div>Plays</div>
+          </div>
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="dance-battle-best">0</div>
+            <div>Best</div>
+          </div>
+        </div>
+        <button class="btn play-btn" onclick="playGame('games/dance-battle-seniors/index.html')">Play Now 🎮</button>
+      </div>
+
+      <div class="game-card glass" data-type="action" data-game="food-fight">
+        <span class="game-icon">🍕🌮</span>
+        <h2 class="game-title">Food Fight Frenzy</h2>
+        <p class="game-desc">Epic food battles with AI enemies, power-ups, and real-time multiplayer action!</p>
+        <div class="game-features">
+          <span class="feature-tag">⚔️ Action</span>
+          <span class="feature-tag">🤖 AI Combat</span>
+          <span class="feature-tag">🎯 Multiplayer</span>
+          <span class="feature-tag">💥 Power-ups</span>
+        </div>
+        <div class="game-stats">
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="food-fight-plays">0</div>
+            <div>Plays</div>
+          </div>
+          <div class="game-stat">
+            <div class="game-stat-value" data-stat="food-fight-best">0</div>
+            <div>Best</div>
+          </div>
+        </div>
+        <button class="btn play-btn" onclick="playGame('games/food-fight-frenzy/index.html')">Play Now 🎮</button>
+      </div>
+    </div>
+
+    <div class="leaderboard glass">
+      <h2 class="leaderboard-title">🏆 Global Leaderboard</h2>
+      <div class="leaderboard-list" id="leaderboard"></div>
+    </div>
+  </div>
+
+  <button class="ai-toggle" onclick="toggleAI()" aria-label="Toggle AI Assistant">
+    🤖
+  </button>
+
+  <div class="ai-panel glass" id="ai-panel">
+    <h3>🤖 AI Gaming Assistant</h3>
+    <div class="ai-messages" id="ai-messages">
+      <div class="ai-message">
+        👋 Hi! I'm your AI gaming assistant. I can help you improve your gameplay, suggest strategies, and track your progress!
+      </div>
+    </div>
+    <button class="btn" onclick="getAIRecommendation()">Get Recommendation</button>
+  </div>
+
+  <script src="assets/js/game-utils.js"></script>
+  <script src="assets/js/ai-assistant.js"></script>
+  <script src="assets/js/analytics.js"></script>
+  <script>
+    const ai = new AIAssistant();
+    let currentFilter = 'all';
+
+    function init() {
+      GameUtils.initTheme();
+      updateThemeIcon();
+      loadStats();
+      loadLeaderboard();
+    }
+
+    function toggleTheme() {
+      const theme = GameUtils.toggleTheme();
+      updateThemeIcon();
+    }
+
+    function updateThemeIcon() {
+      const theme = document.documentElement.getAttribute('data-theme');
+      document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+
+    function toggleAI() {
+      const panel = document.getElementById('ai-panel');
+      panel.classList.toggle('active');
+    }
+
+    function loadStats() {
+      let totalPlays = 0, bestScore = 0, totalTime = 0;
+      
+      ['zombie-plant', 'clumsy-cat', 'office-prank', 'dance-battle', 'food-fight'].forEach(game => {
+        const analytics = new GameAnalytics(game);
+        const stats = analytics.getStats();
+        
+        if (stats) {
+          totalPlays += stats.totalGames;
+          bestScore = Math.max(bestScore, stats.bestScore);
+          totalTime += stats.totalPlayTime;
+          
+          document.querySelector(`[data-stat="${game}-plays"]`).textContent = stats.totalGames;
+          document.querySelector(`[data-stat="${game}-best"]`).textContent = Math.round(stats.bestScore);
+        }
+      });
+
+      document.getElementById('total-plays').textContent = totalPlays;
+      document.getElementById('best-score').textContent = Math.round(bestScore);
+      document.getElementById('play-time').textContent = (totalTime / 3600000).toFixed(1) + 'h';
+    }
+
+    function loadLeaderboard() {
+      const allScores = [];
+      
+      ['zombie-plant', 'clumsy-cat', 'office-prank', 'dance-battle', 'food-fight'].forEach(game => {
+        const scores = GameUtils.getLeaderboard(game, 5);
+        scores.forEach(s => allScores.push({ ...s, game }));
+      });
+
+      allScores.sort((a, b) => b.score - a.score);
+      const top10 = allScores.slice(0, 10);
+
+      const leaderboard = document.getElementById('leaderboard');
+      leaderboard.innerHTML = top10.map((item, i) => {
+        const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
+        return `
+          <div class="leaderboard-item">
+            <span class="rank ${rankClass}">${medal} #${i + 1}</span>
+            <span>${item.game}</span>
+            <span><strong>${Math.round(item.score)}</strong> pts</span>
+          </div>
+        `;
+      }).join('') || '<div class="ai-message">No scores yet. Start playing to see the leaderboard!</div>';
+    }
+
+    function filterGames() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const cards = document.querySelectorAll('.game-card');
+      
+      cards.forEach(card => {
+        const title = card.querySelector('.game-title').textContent.toLowerCase();
+        const desc = card.querySelector('.game-desc').textContent.toLowerCase();
+        const type = card.dataset.type;
+        
+        const matchesSearch = title.includes(search) || desc.includes(search);
+        const matchesFilter = currentFilter === 'all' || type === currentFilter;
+        
+        card.style.display = matchesSearch && matchesFilter ? 'block' : 'none';
+      });
+    }
+
+    function filterByType(type) {
+      currentFilter = type;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      filterGames();
+    }
+
+    function playGame(url) {
+      GameUtils.playSound(800, 100);
+      GameUtils.vibrate([50]);
+      window.location.href = url;
+    }
+
+    function getAIRecommendation() {
+      const messages = document.getElementById('ai-messages');
+      const recommendations = [
+        "🎯 Try Zombie Plant Defenders for strategic gameplay!",
+        "⚡ Your reaction time is improving! Try harder difficulty.",
+        "🏆 You're close to unlocking an achievement!",
+        "💡 Tip: Use combos to maximize your score!",
+        "🎮 You've played 5 games today. Great dedication!"
+      ];
+      
+      const msg = document.createElement('div');
+      msg.className = 'ai-message';
+      msg.textContent = recommendations[Math.floor(Math.random() * recommendations.length)];
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    init();
+  </script>
 </body>
 </html>
